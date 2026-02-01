@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melody Vibes - Listen and enjoy</title>
+    <style>
+        /* CSS STYLES */
+        :root {
+            --primary: #ff4757;
+            --dark: #2f3542;
+            --light: #ffffff;
+            --bg: #f1f2f6;
+            --accent: #2ed573;
+        }
+         * {
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden; /* Empêche le défilement horizontal */
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 8%;
+            background: var(--dark);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Logo and Brand Alignment */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Space between SVG and Text */
+            font-size: 1.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo svg {
+            color: var(--primary);
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .brand-text {
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .brand-text span {
+            color: var(--primary);
+        }
+
+        .logo:hover svg {
+            transform: rotate(-10deg);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
+        .nav-links li { cursor: pointer; font-size: 0.9rem; opacity: 0.8; transition: 0.3s; }
+        .nav-links li:hover { opacity: 1; color: var(--primary); }
+
+        /* Hero / Search Section */
+        .hero {
+            flex: 1;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.8rem; margin-bottom: 10px; color: var(--dark); }
+        .hero p { color: #747d8c; margin-bottom: 40px; }
+
+        .search-container {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .search-group {
+            display: flex;
+            background: white;
+            padding: 5px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #ddd;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            border-radius: 50px 0 0 50px;
+        }
+
+        #searchBtn {
+            padding: 0 35px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        #searchBtn:hover { background: #e84118; transform: scale(1.02); }
+        #searchBtn:active { transform: scale(0.98); }
+
+        /* Loader Animation */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+            display: none;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Results Area */
+        .results-list {
+            max-width: 750px;
+            margin: 40px auto;
+            text-align: left;
+        }
+
+        .result-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .song-info strong { display: block; font-size: 1.1rem; color: var(--dark); margin-bottom: 5px; }
+        .song-info span { font-size: 0.85rem; color: #a4b0be; }
+
+        .actions { display: flex; gap: 10px; }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-download { background: var(--accent); color: white; }
+        .btn-download:hover { background: #26af5a; }
+        
+        .btn-cloud { background: #70a1ff; color: white; }
+
+        footer {
+            padding: 30px;
+            background: #dfe4ea;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #747d8c;
+        }
+
+       @media (max-width: 600px) {
+    .navbar { 
+        flex-direction: column; 
+        gap: 15px; 
+        padding: 15px 5%; /* Réduit le padding pour gagner de l'espace */
+    }
+    
+    .hero h1 { font-size: 2rem; }
+    
+    .search-group { 
+        border-radius: 25px; 
+        width: 100%; /* S'assure qu'elle ne dépasse pas */
+    }
+
+    input[type="text"] {
+        padding: 12px 15px; /* Réduit la taille de l'input */
+        font-size: 1rem;
+    }
+
+    .result-card { 
+        flex-direction: column; 
+        text-align: center; 
+        gap: 15px; 
+        margin-left: 10px; 
+        margin-right: 10px; /* Ajoute une marge pour ne pas coller aux bords */
+    }
+
+    .result-card img {
+        width: 100%; /* L'image s'adapte à la largeur du téléphone */
+        max-width: 150px;
+        height: auto;
+    }
+
+    .actions {
+        width: 100%;
+    }
+
+    .btn-download {
+        width: 100%; /* Bouton plus large pour le pouce sur mobile */
+        display: block;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 17V5L19 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 17C9 18.6569 7.65685 20 6 20C4.34315 20 3 18.6569 3 17C3 15.3431 4.34315 14 6 14C7.65685 14 9 15.3431 9 17Z" fill="currentColor"/>
+                <path d="M19 15C19 16.6569 17.6569 18 16 18C14.3431 18 13 16.6569 13 15C13 13.3431 14.3431 12 16 12C17.6569 12 19 13.3431 19 15Z" fill="currentColor"/>
+            </svg>
+            <span class="brand-text">Melody<span>Vibes</span></span>
+        </div>
+        <ul class="nav-links">
+            <li>YouTube to MP3</li>
+            <li>Playlists</li>
+            <li>FAQ</li>
+        </ul>
+    </nav>
+
+    <main class="hero">
+        <div class="search-container">
+            <h1>Free MP3 Downloads</h1>
+            <p>The world's most popular free MP3 search engine.</p>
+            
+            <div class="search-group">
+                <input type="text" id="searchInput" placeholder="Paste your youtube url link here...">
+                <button id="searchBtn">Search</button>
+            </div>
+
+            <div id="loader" class="loader"></div>
+            <div id="results" class="results-list"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MelodyVibes Project. For educational purposes only.</p>
+        <p>Terms of Service | Privacy Policy | DMCA</p>
+    </footer>
+
+    <script>
+        // JAVASCRIPT LOGIC
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.getElementById('searchInput');
+        const resultsDiv = document.getElementById('results');
+        const loader = document.getElementById('loader');
+
+       const API_KEY = 'AIzaSyC7FC7DH68fP_PrpCKOQTJqrVIvMPaEk8s'; // Remplace par ta clé
+
+        async function performSearch() {
+            console.log('performSearch function enteredd')
+            const query = searchInput.value.trim();
+            if (!query) return;
+        
+            resultsDiv.innerHTML = "";
+            loader.style.display = "block";
+        
+            try {
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${API_KEY}`);
+                const data = await response.json();
+        
+                loader.style.display = "none";
+        
+                data.items.forEach((item) => {
+                    const videoId = item.id.videoId;
+                    const title = item.snippet.title;
+                    const thumbnail = item.snippet.thumbnails.medium.url;
+        
+                    const card = document.createElement('div');
+                    card.className = 'result-card';
+                    card.innerHTML = `
+                        <div style="display:flex; gap:15px; align-items:center;">
+                            <img src="${thumbnail}" style="width:120px; border-radius:8px;">
+                            <div class="song-info">
+                                <strong>${title}</strong>
+                                <span>ID: ${videoId}</span>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-download" onclick="downloadMusic('${videoId}')">Download MP3</button>
+                        </div>
+                    `;
+                    resultsDiv.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Erreur API:", error);
+                loader.style.display = "none";
+            }
+        }
+
+        async function downloadMusic(videoId) {
+           
+           const rapidApiKey = '8a0a1605e0mshf48aa89fcbfbfc7p1fb639jsnbc2a291c08e1';
+    
+            // On affiche un message de chargement
+            alert("Préparation du lien de téléchargement... Veuillez patienter.");
+
+            
+            const url = `https://youtube-mp36.p.rapidapi.com/dl?id=${videoId}`;
+            const options = {
+            	method: 'GET',
+            	headers: {
+            		'x-rapidapi-key': rapidApiKey,
+            		'x-rapidapi-host': 'youtube-mp36.p.rapidapi.com'
+            	}
+            };
+            
+            try {
+            	const response = await fetch(url, options);
+            	const result = await response.json();
+            	console.log(result);
+                if (result.link) {
+                    window.location.href = result.link; // Déclenche le téléchargement
+                } else {
+                    alert("Erreur: " + (result.msg || "Impossible de récupérer le lien."));
+                }
+            } catch (error) {
+            	console.error(error);
+            }
+        }
+
+        // Event Listeners
+        searchBtn.addEventListener('click', performSearch);
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+    </script>
+</body>
+</html>
