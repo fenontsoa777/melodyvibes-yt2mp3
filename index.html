@@ -287,45 +287,15 @@
 
        const API_KEY = 'AIzaSyC7FC7DH68fP_PrpCKOQTJqrVIvMPaEk8s'; // Remplace par ta clé
 
-        async function performSearch() {
-            console.log('performSearch function enteredd')
-            const query = searchInput.value.trim();
-            if (!query) return;
+        async function get_video_id() {
+            
+            
         
             resultsDiv.innerHTML = "";
             loader.style.display = "block";
+            ///////////code de recuperation video_id ici
+            loader.style.display = "block";
         
-            try {
-                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${API_KEY}`);
-                const data = await response.json();
-        
-                loader.style.display = "none";
-        
-                data.items.forEach((item) => {
-                    const videoId = item.id.videoId;
-                    const title = item.snippet.title;
-                    const thumbnail = item.snippet.thumbnails.medium.url;
-        
-                    const card = document.createElement('div');
-                    card.className = 'result-card';
-                    card.innerHTML = `
-                        <div style="display:flex; gap:15px; align-items:center;">
-                            <img src="${thumbnail}" style="width:120px; border-radius:8px;">
-                            <div class="song-info">
-                                <strong>${title}</strong>
-                                <span>ID: ${videoId}</span>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-download" onclick="downloadMusic('${videoId}')">Download MP3</button>
-                        </div>
-                    `;
-                    resultsDiv.appendChild(card);
-                });
-            } catch (error) {
-                console.error("Erreur API:", error);
-                loader.style.display = "none";
-            }
         }
 
         async function downloadMusic(videoId) {
